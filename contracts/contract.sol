@@ -54,7 +54,7 @@ contract Ownership {
     return addressToGuns[owner];
   }
 
-  function getOwnder(string memory serialNumber) public view returns (address) {
+  function getOwner(string memory serialNumber) public view returns (address) {
     return serialNumToGun[serialNumber].owner;
   }
 }
