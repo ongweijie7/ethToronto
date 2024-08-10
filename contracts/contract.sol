@@ -12,20 +12,20 @@ contract Ownership {
   mapping(string => Gun) private serialNumToGun; //maps serial number to gun
   mapping(address => string[]) private addressToGuns; //maps address to guns
 
-  event ItemRegistered(string serialNumber, address indexed owner);
+  event GunRegistered(string serialNumber, address indexed owner);
   event OwnershipTransferred(string serialNumber, address indexed oldOwner, address indexed newOwner);
 
   constructor() public {
     ownerAddress = msg.sender;
   }
 
-  function registerItem(string memory serialNumber) public {
+  function registerGun(string memory serialNumber) public {
     require(bytes(serialNumToGun[serialNumber].serialNumber).length == 0, "Item already registered");
 
     serialNumToGun[serialNumber] = Gun(serialNumber, msg.sender);
     addressToGuns[msg.sender].push(serialNumber);
 
-    emit ItemRegistered(serialNumber, msg.sender);
+    emit GunRegistered(serialNumber, msg.sender);
   }
 
   function transferOwnership(string memory serialNumber, address newOwnerAddress) public {
