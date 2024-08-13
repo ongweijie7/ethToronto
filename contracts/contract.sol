@@ -13,7 +13,7 @@ contract Ownership {
   mapping(address => string[]) private addressToGuns; //maps address to guns
 
   event GunRegistered(string serialNumber, address indexed owner);
-  event OwnershipTransferred(string serialNumber, address indexed oldOwner, address indexed newOwner);
+  event OwnershipTransferred(bytes32 indexed hashedSerial, address indexed oldOwner, address indexed newOwner);
 
   constructor() public {
     ownerAddress = msg.sender;
@@ -47,7 +47,8 @@ contract Ownership {
     }
 
     newOwnerGuns.push(serialNumber);
-    emit OwnershipTransferred(serialNumber, oldOwnerAddress, newOwnerAddress);
+    bytes32 serialHashed = keccak256(abi.encodePacked(serialNumber));
+    emit OwnershipTransferred(serialHashed, oldOwnerAddress, newOwnerAddress);
   }
 
   function getGunsByOwner(address owner) public view returns (string[] memory) {
@@ -56,5 +57,9 @@ contract Ownership {
 
   function getOwner(string memory serialNumber) public view returns (address) {
     return serialNumToGun[serialNumber].owner;
+  }
+
+  function getHashedSerialNum(string memory serial) public pure returns (bytes32) {
+    return keccak256(abi.encodePacked(serial));
   }
 }
